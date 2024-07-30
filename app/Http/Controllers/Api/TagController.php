@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Kategori;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Str;
 use Validator;
 
-class KategoriController extends Controller
+class TagController extends Controller
 {
     public function index()
     {
-        $kategori = Kategori::latest()->get();
+        $tag = Tag::latest()->get();
         $res = [
             'success' => true,
-            'message' => 'Daftar Kategori',
-            'data' => $kategori,
+            'message' => 'Daftar tag',
+            'data' => $tag,
         ];
         return response()->json($res, 200);
     }
@@ -24,7 +24,7 @@ class KategoriController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nama_kategori' => 'required|unique:kategoris',
+            'nama_tag' => 'required|unique:tags',
         ]);
 
         if ($validator->fails()) {
@@ -36,14 +36,14 @@ class KategoriController extends Controller
         }
 
         try {
-            $kategori = new Kategori();
-            $kategori->nama_kategori = $request->nama_kategori;
-            $kategori->slug = Str::slug($request->nama_kategori);
-            $kategori->save();
+            $tag = new Tag();
+            $tag->nama_tag = $request->nama_tag;
+            $tag->slug = Str::slug($request->nama_tag);
+            $tag->save();
             return response()->json([
                 'success' => true,
                 'message' => 'data berhasil dibuat',
-                'data' => $kategori,
+                'data' => $tag,
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
@@ -57,12 +57,12 @@ class KategoriController extends Controller
     public function show($id)
     {
         try {
-            $kategori = Kategori::findOrfail($id);
+            $tag = Tag::findOrfail($id);
             return response()->json([
-            'success' => true,
-            'massage' => 'Detail Kategori',
-            'data' => $kategori,
-        ], 200);
+                'success' => true,
+                'massage' => 'Detail tag',
+                'data' => $tag,
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -75,7 +75,7 @@ class KategoriController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'nama_kategori' => 'required',
+            'nama_tag' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -87,14 +87,14 @@ class KategoriController extends Controller
         }
 
         try {
-            $kategori = Kategori::findOrFail($id);
-            $kategori->nama_kategori = $request->nama_kategori;
-            $kategori->slug = Str::slug($request->nama_kategori);
-            $kategori->save();
+            $tag = Tag::findOrFail($id);
+            $tag->nama_tag = $request->nama_tag;
+            $tag->slug = Str::slug($request->nama_tag);
+            $tag->save();
             return response()->json([
                 'success' => true,
                 'message' => 'data berhasil Diperbarui',
-                'data' => $kategori,
+                'data' => $tag,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -108,12 +108,12 @@ class KategoriController extends Controller
     public function destroy($id)
     {
         try {
-            $kategori = Kategori::findOrfail($id);
-            $kategori->delete();
+            $tag = Tag::findOrfail($id);
+            $tag->delete();
             return response()->json([
-            'success' => true,
-            'massage' => 'Data ' .$kategori->nama_kategori . ' Berhasil Dihapus',
-        ], 200);
+                'success' => true,
+                'massage' => 'Data ' . $tag->nama_tag . ' Berhasil Dihapus',
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -123,5 +123,3 @@ class KategoriController extends Controller
         }
     }
 }
-
-
